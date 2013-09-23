@@ -1,3 +1,7 @@
+/*
+Ben Moyer, 9/23/2013.
+CSC155, Lab 2
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
