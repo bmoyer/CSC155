@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <sys/types.h>
+#include <assert.h>
 
 #define MAXLINE 80
 #define MAX_ARGS 80
@@ -19,7 +20,7 @@ int main(void)
     int status;
     printf("%% ");
 
-    while (fgets(buf, MAXLINE, stdin) != NULL) {
+    while (fgets(buf, MAXLINE, stdin) != NULL ) {
         if (buf[strlen(buf) - 1] == '\n')
             buf[strlen(buf) - 1] = 0;  /* replace newline with null */
 
@@ -34,7 +35,8 @@ int main(void)
             i = i + 1;
            }
            argv[i] = NULL;
-           execvp(argv[0],argv);
+           assert( (char*)argv[0] != "exit" );
+            execvp(argv[0],argv);
             printf("Error in cmd: %s", buf);
             exit(127);
         }
