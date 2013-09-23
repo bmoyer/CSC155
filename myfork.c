@@ -4,7 +4,6 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <sys/types.h>
-#include <assert.h>
 
 #define MAXLINE 80
 #define MAX_ARGS 80
@@ -35,7 +34,6 @@ int main(void)
             i = i + 1;
            }
            argv[i] = NULL;
-           assert( (char*)argv[0] != "exit" );
             execvp(argv[0],argv);
             printf("Error in cmd: %s", buf);
             exit(127);
