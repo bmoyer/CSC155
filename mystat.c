@@ -3,29 +3,39 @@
 #include <dirent.h>
 #include <string.h>
 #include <errno.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <time.h>
+char* date;
 int main(int argc, char *argv[])
 {
 	char buf[30];
 	DIR *dp;
 	struct dirent *dirp;
+
+	struct stat b1;
+	char *ptr;
+	char *date;
+
 	bzero(buf, sizeof(buf));
 	if (argc != 4){
-		fprintf(stderr, "usage : ls1 <directory> <directory> <directory>\n");
+		fprintf(stderr, "usage : ./mystat <file1> <file2> <file3>\n");
 		exit(1);
 	}
 	int i = 0;
 	for(i = 1; i < 4; i++){
-	if ((dp = opendir(argv[i])) == NULL ) {
-		strncpy(buf, "can't open", sizeof("can't open"));
-		strcat(buf, argv[1]);
-		strcat(buf, "\n");
-		fprintf(stderr, buf);
-		exit(1);
+	stat(argv[i], &b1);
+//	printf("\nFile: %s\n", argv[i]);
+	
+	printf("File: %s, Time: %s", argv[i], ctime(&b1.st_ctime));
+
+
+	if( (char*)&b1.st_ctime > date ) { date = ctime(&b1.st_ctime); } 
+	if( i != 1) { if( ctime(&b1.st_ctime) > date) { date = ctime(&b1.st_ctime); } }
+
+	//time of last status change.  can be modified.
 	}
-	printf("\nDirectory #%d: %s\n---------\n",i,argv[i]);
-	while ((dirp = readdir(dp)) != NULL)
-		printf("%s\n", dirp->d_name);
-	closedir(dp);
-	}
+	printf("%s",date);
 	exit(0);
 }
