@@ -1,4 +1,4 @@
-Ben Moyer, 10/11/2013
+Ben Moyer, 10/14/2013
 File stat program
 
 Usage of this program is as follows:
