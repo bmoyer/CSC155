@@ -16,8 +16,7 @@
 
 //these are the functions that handle() will call
 //they handle any commands passed in.
-void reverse(char s[])
-{
+void reverse(char s[]){
       int length = strlen(s) ;
       int c, i, j;
 
@@ -27,26 +26,32 @@ void reverse(char s[])
          s[i] = s[j];
          s[j] = c;
       }
+printf("%s\n",s);
 }
 
-//handles direct print statements
-//another function will handle file commands
-void handle(char *cmdArray[]){
-//printf("arg: %s\n", cmdArray[0]);
+void caesar(char x[], int y){
+printf("placeholder");
+}
 
-if( strcmp(cmdArray[0], "reverse") == 0 && cmdArray[1] != NULL){
-	reverse(cmdArray[1]); printf("%s\n",cmdArray[1]);}		
+int handleInt(char *cmdArray[]){
 if ( strcmp(cmdArray[0], "bit_or") == 0 && cmdArray[1] != NULL)
-	printf("%d\n", atoi(cmdArray[1]) | atoi(cmdArray[2]) );
+	return atoi(cmdArray[1]) | atoi(cmdArray[2]) ;
 if ( strcmp(cmdArray[0], "bit_and") == 0)
-	printf("%d\n", atoi(cmdArray[1]) & atoi(cmdArray[2]) );
+	return atoi(cmdArray[1]) & atoi(cmdArray[2]) ;
 if ( strcmp(cmdArray[0], "bit_xor") == 0)
-	printf("%d\n", atoi(cmdArray[1]) ^ atoi(cmdArray[2]) );
+	return atoi(cmdArray[1]) ^ atoi(cmdArray[2]);
 if ( strcmp(cmdArray[0], "bit_shift_left") == 0)
-	printf("%d\n", atoi(cmdArray[1]) << atoi(cmdArray[2]) );
+	return atoi(cmdArray[1]) << atoi(cmdArray[2]) ;
 if ( strcmp(cmdArray[0], "bit_shift_right") == 0)
-	printf("%d\n", atoi(cmdArray[1]) >> atoi(cmdArray[2]) );
-//else printf("invalid input.");
+	return atoi(cmdArray[1]) >> atoi(cmdArray[2]) ;
+}
+
+void handleString(char *cmdArray[])
+{
+if ( strcmp(cmdArray[0], "caesar_cipher") == 0)
+	caesar(cmdArray[0],atoi(cmdArray[1])); 
+if( strcmp(cmdArray[0], "reverse") == 0 && cmdArray[1] != NULL){
+	reverse(cmdArray[1]);}		
 }
 
 int main(int argc, char *argv[]) {
@@ -65,22 +70,35 @@ int main(int argc, char *argv[]) {
 	
 	i = 0;	
 	while( cmd != NULL ){
-	
 	commandArray[i] = cmd;	
-//	printf("%s\n", cmd);
 	cmd = strtok(NULL, DELIMS);	
 	i++;
 	}
+
 	//accessing members of commandArray
 	//printf("arg1: %s arg2: %s", commandArray[0], commandArray[1]);
 	char *firstCmd = commandArray[0];
 
 	//check to make sure command is defined, if not print error message
-	if( strcmp(firstCmd, "reverse") != 0 && strcmp(firstCmd, "bit_or") != 0 && strcmp(firstCmd, "bit_and") != 0 && strcmp(firstCmd, "bit_xor") != 0 && strcmp(firstCmd, "bit_shift_left") != 0 && strcmp(firstCmd, "bit_shift_right") != 0 ) { printf("Improper syntax.\n");}
-	else handle(commandArray);
-	
-	}
 
+	//int commands
+	if( strcmp(firstCmd, "bit_or") == 0
+	|| strcmp(firstCmd, "bit_and") == 0 
+	|| strcmp(firstCmd, "bit_xor") == 0 
+	|| strcmp(firstCmd, "bit_shift_left") == 0 
+	|| strcmp(firstCmd, "bit_shift_right") == 0 ) 
+	{ 
+	printf("%d\n", handleInt(commandArray));
 	}
+	
+	//string commands
+	if ( strcmp(firstCmd, "reverse") == 0 
+	|| strcmp(firstCmd, "caesar_cipher") == 0) 
+	{ 
+	handleString(commandArray);
+	}
+}//end command parsing
+
+}
 }
 
