@@ -34,15 +34,15 @@ printf("placeholder");
 }
 
 int handleInt(char *cmdArray[]){
-if ( strcmp(cmdArray[0], "bit_or") == 0 && cmdArray[1] != NULL)
+if ( strcmp(cmdArray[0], "bit_or") == 0 && cmdArray[1] != NULL && cmdArray[2] != NULL)
 	return atoi(cmdArray[1]) | atoi(cmdArray[2]) ;
-if ( strcmp(cmdArray[0], "bit_and") == 0)
+if ( strcmp(cmdArray[0], "bit_and") == 0 && cmdArray[1] != NULL && cmdArray[2] != NULL)
 	return atoi(cmdArray[1]) & atoi(cmdArray[2]) ;
-if ( strcmp(cmdArray[0], "bit_xor") == 0)
+if ( strcmp(cmdArray[0], "bit_xor") == 0 && cmdArray[1] != NULL && cmdArray[2] != NULL)
 	return atoi(cmdArray[1]) ^ atoi(cmdArray[2]);
-if ( strcmp(cmdArray[0], "bit_shift_left") == 0)
+if ( strcmp(cmdArray[0], "bit_shift_left") == 0 && cmdArray[1] != NULL && cmdArray[2] != NULL)
 	return atoi(cmdArray[1]) << atoi(cmdArray[2]) ;
-if ( strcmp(cmdArray[0], "bit_shift_right") == 0)
+if ( strcmp(cmdArray[0], "bit_shift_right") == 0 && cmdArray[1] != NULL && cmdArray[2] != NULL)
 	return atoi(cmdArray[1]) >> atoi(cmdArray[2]) ;
 }
 
@@ -53,6 +53,22 @@ if ( strcmp(cmdArray[0], "caesar_cipher") == 0)
 if( strcmp(cmdArray[0], "reverse") == 0 && cmdArray[1] != NULL){
 	reverse(cmdArray[1]);}		
 }
+
+void handleProc(char *cmdArray[])
+{
+FILE *file = fopen(cmdArray[1], "r");
+if (file != NULL){
+
+char line[128];
+while( fgets (line, sizeof line, file) != NULL)
+{
+//	fputs(line, stdout);  //this will print the file line by line
+}
+fclose(file);
+}
+else printf("file was null");
+
+}//end function
 
 int main(int argc, char *argv[]) {
   char *cmd;
@@ -97,6 +113,16 @@ int main(int argc, char *argv[]) {
 	{ 
 	handleString(commandArray);
 	}
+	
+	if ( strcmp(firstCmd, "process_file") == 0) {  handleProc(commandArray); }
+	
+	//exit
+	if ( strcmp(firstCmd, "exit") == 0) 
+	{
+	printf("Goodbye.\n");
+	exit(0);
+	}
+	
 }//end command parsing
 
 }
