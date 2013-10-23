@@ -14,16 +14,7 @@
 #define MAX_LENGTH 1024
 #define DELIMS " \t\r\n"
 
-//these are the functions that handle() will call
-//they handle any commands passed in.
-
-
-//this function should take any char *cmdArray[] and return the correct value
-//this should directly handle int commands, and pass off string commands.
-//ALL COMMANDS SHOULD GO HERe
-
-//this takes cmdArray[] either from a line in a process_file or from user input directly
-char test[100];
+char buf[100];
 
 void reverse(char s[]){
 int length = strlen(s); int c, i, j;
@@ -33,20 +24,62 @@ for(i = 0, j = length-1; i<j; i++, j--){
 	s[i] = s[j];
 	s[j] = c;
 	}
-sprintf(test,"%s", s);
+sprintf(buf,"%s", s);
 }
 
+void caesar(char s[], int shift){
+int i = 0;
+
+while( s[i] != '\0' ){
+if( s[i] >= 65 && s[i] <=90){   //caps?
+	if( s[i] + shift > 90){
+		s[i] = ((s[i] + shift)%90)+64;
+	}
+	else
+	{
+		s[i] += shift;
+	}
+}
+
+if( s[i] >=97 && s[i] <= 122){ 
+	if( s[i] + shift > 122){
+		s[i] = ((s[i] + shift)%58) + 90;
+	}
+	else
+	{
+		s[i] += shift;
+	}
+
+}
+if( s[i] >= 48 && s[i] <= 57){
+	if( s[i] + shift > 57 ){
+		s[i] = ((s[i] + shift)%57) + 47;
+	}
+	else
+	{
+		s[i]+= shift;
+	}
+
+
+}
+
+
+	i++;
+}
+
+sprintf(buf, "%s", s);
+}
 
 char *handle(char *cmdArray[])
 {
 char *cmd = cmdArray[0];
-if( strcmp(cmd,"bit_or") == 0) { sprintf(test, "%d", atoi(cmdArray[1]) | atoi(cmdArray[2])); return test; }
-if( strcmp(cmd,"bit_and") == 0) { sprintf(test, "%d", atoi(cmdArray[1]) & atoi(cmdArray[2])); return test; }
-if( strcmp(cmd,"bit_xor") == 0) { sprintf(test, "%d", atoi(cmdArray[1]) ^ atoi(cmdArray[2])); return test; }
-if( strcmp(cmd,"bit_shift_right") == 0) { sprintf(test, "%d", atoi(cmdArray[1]) >> atoi(cmdArray[2])); return test; }
-if( strcmp(cmd,"bit_shift_left") == 0) { sprintf(test, "%d", atoi(cmdArray[1]) << atoi(cmdArray[2])); return test; }
-if( strcmp(cmd,"reverse") == 0) { reverse(cmdArray[1]); return test; }
-if( strcmp(cmd,"caesar_cipher") == 0) { return *cmdArray; }//placeholder
+if( strcmp(cmd,"bit_or") == 0) { sprintf(buf, "%d", atoi(cmdArray[1]) | atoi(cmdArray[2])); return buf; }
+if( strcmp(cmd,"bit_and") == 0) { sprintf(buf, "%d", atoi(cmdArray[1]) & atoi(cmdArray[2])); return buf; }
+if( strcmp(cmd,"bit_xor") == 0) { sprintf(buf, "%d", atoi(cmdArray[1]) ^ atoi(cmdArray[2])); return buf; }
+if( strcmp(cmd,"bit_shift_right") == 0) { sprintf(buf, "%d", atoi(cmdArray[1]) >> atoi(cmdArray[2])); return buf; }
+if( strcmp(cmd,"bit_shift_left") == 0) { sprintf(buf, "%d", atoi(cmdArray[1]) << atoi(cmdArray[2])); return buf; }
+if( strcmp(cmd,"reverse") == 0) { reverse(cmdArray[1]); return buf; }
+if( strcmp(cmd,"caesar_cipher") == 0) { caesar(cmdArray[1], atoi(cmdArray[2])); return buf; }//placeholder
 }
 
 void processFile(char *cmdArray[])
@@ -61,7 +94,7 @@ char line[128];
 
 while( fgets(line, sizeof line, fileIn) != NULL)
 {
-//this is where you should do stuff line-by-line
+//going line by line through fileIn, filling commandArray[] for processing
 	if (cmd = strtok(line, DELIMS)){
 	i = 0;
 	while( cmd != NULL){
@@ -75,20 +108,20 @@ while( fgets(line, sizeof line, fileIn) != NULL)
 	}
 
 }
+//tying up some loose ends before we're done
 fclose(fileIn);
 fclose(fileOut);
-	}	
+}	
 }
 
+//all commands are initially sent here for processing.
 void processInput(char *cmdArray[]){
 char *cmd = cmdArray[0];
-if( strcmp(cmd,"process_file") != 0) { printf("%s\n",handle(cmdArray)); }
+if( strcmp(cmd,"exit") == 0) { printf("cya\n"); exit(0);}
 if( strcmp(cmd,"process_file") == 0) { processFile(cmdArray);}
+if( strcmp(cmd,"process_file") != 0) { printf("%s\n",handle(cmdArray)); }
 }
 
-
-
-//start of main
 int main(int argc, char *argv[]) {
   char *cmd;
   char line[MAX_LENGTH];
@@ -96,7 +129,7 @@ int main(int argc, char *argv[]) {
   int i;
 
   while (1) {
-    printf("$ ");
+    printf(">> ");
     if (!fgets(line, MAX_LENGTH, stdin)) break;
 
     if ((cmd = strtok(line, DELIMS))) {
@@ -107,10 +140,9 @@ int main(int argc, char *argv[]) {
 	cmd = strtok(NULL, DELIMS);	
 	i++;
 	}
+	//all input is put into commandArray[] and sent to processInput() for processing
 	processInput(commandArray);
-
 }
-
 }
 }
 
