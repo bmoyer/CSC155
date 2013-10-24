@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-
+#include <setjmp.h>
+#include <stdbool.h>
 #ifdef _WIN32
 #include <windows.h>
 #define chdir _chdir
@@ -14,7 +15,35 @@
 #define MAX_LENGTH 1024
 #define DELIMS " \t\r\n"
 
+//error catching test
+#define TRY do{ jmp_buf ex_buf__; if( !setjmp(ex_buf__) ){
+#define CATCH } else {
+#define ETRY } }while(0)
+#define THROW longjmp(ex_buf__, 1)
+
+
+
 char buf[100];
+
+void kill(){ printf("Stopping execution, bye"); exit(0);}
+
+bool isValidInput(char *cmdArray[]){
+
+char *cmd = cmdArray[0];
+
+if( strcmp(cmd, "exit") == 0) { return true; }
+if( strcmp(cmd, "bit_shift_left") == 0) { return true; }
+if( strcmp(cmd, "bit_shift_right") == 0) { return true; }
+if( strcmp(cmd, "bit_or") == 0) { return true; }
+if( strcmp(cmd, "bit_xor") == 0) { return true; }
+if( strcmp(cmd, "bit_and") == 0) { return true; }
+if( strcmp(cmd, "process_file") == 0) { return true; }
+if( strcmp(cmd, "caesar_cipher") == 0) { return true; }
+if( strcmp(cmd, "reverse") == 0) { return true; }
+else { return false; }
+
+}
+
 
 void reverse(char s[]){
 int length = strlen(s); int c, i, j;
@@ -28,10 +57,11 @@ sprintf(buf,"%s", s);
 }
 
 void caesar(char s[], int shift){
-int i = 0;
+if( shift > 25) { shift = shift%26; }
 
+int i = 0;
 while( s[i] != '\0' ){
-if( s[i] >= 65 && s[i] <=90){   //caps?
+if( s[i] >= 65 && s[i] <=90){   //handling caps
 	if( s[i] + shift > 90){
 		s[i] = ((s[i] + shift)%90)+64;
 	}
@@ -40,38 +70,34 @@ if( s[i] >= 65 && s[i] <=90){   //caps?
 		s[i] += shift;
 	}
 }
-
 if( s[i] >=97 && s[i] <= 122){ 
-	if( s[i] + shift > 122){
+	if( s[i] + shift > 122){ //handling lowercase
 		s[i] = ((s[i] + shift)%58) + 90;
 	}
 	else
 	{
 		s[i] += shift;
 	}
-
 }
 if( s[i] >= 48 && s[i] <= 57){
-	if( s[i] + shift > 57 ){
+	if( s[i] + shift > 57 ){ //handling ints 0-9
+		//s[i] = ((s[i] + shift)%58) + 38;
 		s[i] = ((s[i] + shift)%57) + 47;
 	}
+
 	else
 	{
 		s[i]+= shift;
 	}
-
-
 }
-
-
 	i++;
 }
-
 sprintf(buf, "%s", s);
 }
 
 char *handle(char *cmdArray[])
 {
+TRY{
 char *cmd = cmdArray[0];
 if( strcmp(cmd,"bit_or") == 0) { sprintf(buf, "%d", atoi(cmdArray[1]) | atoi(cmdArray[2])); return buf; }
 if( strcmp(cmd,"bit_and") == 0) { sprintf(buf, "%d", atoi(cmdArray[1]) & atoi(cmdArray[2])); return buf; }
@@ -79,7 +105,12 @@ if( strcmp(cmd,"bit_xor") == 0) { sprintf(buf, "%d", atoi(cmdArray[1]) ^ atoi(cm
 if( strcmp(cmd,"bit_shift_right") == 0) { sprintf(buf, "%d", atoi(cmdArray[1]) >> atoi(cmdArray[2])); return buf; }
 if( strcmp(cmd,"bit_shift_left") == 0) { sprintf(buf, "%d", atoi(cmdArray[1]) << atoi(cmdArray[2])); return buf; }
 if( strcmp(cmd,"reverse") == 0) { reverse(cmdArray[1]); return buf; }
-if( strcmp(cmd,"caesar_cipher") == 0) { caesar(cmdArray[1], atoi(cmdArray[2])); return buf; }//placeholder
+if( strcmp(cmd,"caesar_cipher") == 0) { caesar(cmdArray[1], atoi(cmdArray[2])); return buf; }
+}
+CATCH{
+printf("error in command");
+}
+ETRY;
 }
 
 void processFile(char *cmdArray[])
@@ -103,16 +134,24 @@ while( fgets(line, sizeof line, fileIn) != NULL)
 		i++;
 		}
 	//write results to the new file, plus a newline.
+	if( isValidInput(commandArray)) {
 	fputs( handle(commandArray), fileOut);
+	
 	fputs("\n",fileOut);
 	}
+	else { fputs("<Invalid command>\n", fileOut); }
+	}
+	
 
 }
 //tying up some loose ends before we're done
 fclose(fileIn);
 fclose(fileOut);
-}	
+printf("Done processing.  Output written to %s.\n", cmdArray[2]);
 }
+else{ printf("Input file was null, try again.\n"); }	
+};
+
 
 //all commands are initially sent here for processing.
 void processInput(char *cmdArray[]){
@@ -141,7 +180,9 @@ int main(int argc, char *argv[]) {
 	i++;
 	}
 	//all input is put into commandArray[] and sent to processInput() for processing
-	processInput(commandArray);
+	
+	if( isValidInput(commandArray)) {processInput(commandArray);}
+	else { printf("Command not supported\n"); }
 }
 }
 }
