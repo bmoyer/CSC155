@@ -16,15 +16,9 @@ strcpy(str, test);
 
 int main()
 {
-int i;
 
-for(i=1; i<20; i++){ 
+char *test = malloc(1000);
+sig2str(17,test);
 
-char *test = malloc(50);
-sig2str(i,test);
 printf("%s\n",test);
-free(test);
-
-}
-
 }
