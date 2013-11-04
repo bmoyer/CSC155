@@ -5,18 +5,19 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-void sig2str(int signo/*, char *str*/){
+void sig2str(int signo, char *str){
 
 char *test = strdup(sys_siglist[signo]);
-printf("%s\n",test);
+
+//printf("%s\n",test);
+
 }
+
+//look for sig2str_max or something similar..
 
 int main()
 {
 
-sig2str(1);
-sig2str(2);
-sig2str(3);
-
+char *test = malloc(1000);
 
 }
