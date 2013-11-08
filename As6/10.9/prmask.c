@@ -36,5 +36,7 @@ pr_mask(const char *str)
 
 int main()
 {
-//stuff
+pr_mask("Starting main");
+
+pr_mask("Ending main");
 }

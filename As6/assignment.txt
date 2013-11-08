@@ -1,0 +1,8 @@
+Problem 10.2, 10.6, 10.9 on p354
+Due Monday 11/11
+
+10.2 Implement the sig2str function described in Section 10.21.
+
+10.6 Write the following program to test the parentchild synchronization functions in Figure 10.24. The process creates a file and writes the integer 0 to the file. The process then calls fork, and the parent and child alternate incrementing the counter in the file. Each time the counter is incremented, print which process (parent or child) is doing the increment.
+
+10.9 Rewrite the function in Figure 10.14 to handle all the signals from Figure 10.1. The function should consist of a single loop that iterates once for every signal in the current signal mask (not once for every possible signal).
