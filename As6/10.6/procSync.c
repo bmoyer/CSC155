@@ -14,19 +14,17 @@ pid = fork();
 
 while(1){
 
-if( pid == 0) {
 sem_wait(&mutex);
+if( pid == 0) {
 printf("I am the child!\n");
-sem_post(&mutex);
 }
 
 
 if( pid != 0 ) {
-sem_wait(&mutex);
 printf("I am the parent!\n");
-sem_post(&mutex);
 }
 
+sem_post(&mutex);
 }
 
 }

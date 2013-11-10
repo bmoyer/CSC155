@@ -1,16 +1,13 @@
 #include <stdio.h>
-#include <unistd.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
-void    TELL_WAIT(void);        /* parent/child from Section 8.9 */
-void    TELL_PARENT(pid_t);
-void    TELL_CHILD(pid_t);
-void    WAIT_PARENT(void);
-void    WAIT_CHILD(void);
+#include <signal.h>
 
-
-
-
+void err_sys(const char *x){
+perror(x);
+exit(1);
+}
 
 static volatile sig_atomic_t sigflag; /* set nonzero by sig handler */
 static sigset_t newmask, oldmask, zeromask;
@@ -81,36 +78,43 @@ WAIT_CHILD(void)
 }
 
 
+
 int main()
 {
-//create the file, write int 0 to it
-FILE *file = fopen("file1.txt", "w");
-fprintf(file, "%d", 0);
-fclose(file);
 
-pid_t pid = fork(); 
+FILE *fo = fopen("file1.txt", "w");
+fprintf(fo,"%d",0);
+pid_t pid;
 
-while(1){ //loop for the forks to play in
+//from APUE
+TELL_WAIT();    /* set things up for TELL_xxx & WAIT_xxx */
 
-//open the target file
-FILE *file2 = fopen("file1.txt", "w+");
 
-//allocating buffer to read the number into
-char *s = malloc(sizeof(int));
-fgets(s, 4, file2);
+if ((pid = fork()) < 0) {
+    err_sys("fork error");
+}
 
-//converting number char to int, incrementing
-//long int addone = strtol(s,NULL,0);
-int addone = atoi(s);
-addone++;
+while(1){
 
-//writing back incremented number
-fprintf(file2,"%d",addone);
-fclose(file2);
+if (pid == 0) {            /* child */
+printf("from CHILD\n");
+    /* child does whatever is necessary ... */
+    TELL_PARENT(getppid());     /* tell parent we're done */
+    WAIT_PARENT();              /* and wait for parent */
 
-if( pid==0 ) { printf("Incremented by CHILD to %d\n",addone);  }
-if( pid!=0 ) { printf("Incremented by PARENT to %d\n",addone); wait();}
-free(s);
+    /* and the child continues on its way ... */
+
+}
+
+if (pid != 0){
+printf("from PARENT\n");
+/* parent does whatever is necessary ... */
+TELL_CHILD(pid);            /* tell child we're done */
+WAIT_CHILD();               /* and wait for child */
+
+/* and the parent continues on its way ... */
+}
+
 }
 
 }
