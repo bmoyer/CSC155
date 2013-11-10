@@ -81,11 +81,11 @@ WAIT_CHILD(void)
 
 int main()
 {
-
+int zero = 0;
 FILE *fo = fopen("file1.txt", "w");
-fprintf(fo,"%d",0);
+fprintf(fo,"%d",zero);
 pid_t pid;
-
+int addone;
 //from APUE
 TELL_WAIT();    /* set things up for TELL_xxx & WAIT_xxx */
 
@@ -96,8 +96,20 @@ if ((pid = fork()) < 0) {
 
 while(1){
 
-if (pid == 0) {            /* child */
-printf("from CHILD\n");
+if (pid == 0){
+
+FILE *read = fopen("file1.txt","r");
+fscanf(read,"%d",&addone);
+fclose(read);
+
+addone++;
+
+FILE *file = fopen("file1.txt", "w");
+fprintf(file, "%d", addone);
+fclose(file);
+printf("Incremented by CHILD to:   %d\n",addone);
+
+
     /* child does whatever is necessary ... */
     TELL_PARENT(getppid());     /* tell parent we're done */
     WAIT_PARENT();              /* and wait for parent */
@@ -107,7 +119,19 @@ printf("from CHILD\n");
 }
 
 if (pid != 0){
-printf("from PARENT\n");
+
+
+FILE *read = fopen("file1.txt","r");
+fscanf(read,"%d",&addone);
+fclose(read);
+
+addone++;
+
+FILE *file = fopen("file1.txt", "w");
+fprintf(file, "%d", addone);
+fclose(file);
+
+printf("Incremented by PARENT to: %d\n",addone);
 /* parent does whatever is necessary ... */
 TELL_CHILD(pid);            /* tell child we're done */
 WAIT_CHILD();               /* and wait for child */
