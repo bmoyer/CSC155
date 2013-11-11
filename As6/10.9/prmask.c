@@ -12,23 +12,30 @@ void err_sys(const char* x)
     exit(1); 
 }
 
-void
+
 pr_mask(const char *str)
 {
     sigset_t    sigset;
-    int         errno_save;
+    int         errno_save,i;
+    
 
     errno_save = errno;     /* we can be called by signal handlers */
     if (sigprocmask(0, NULL, &sigset) < 0)
         err_sys("sigprocmask error");
 
+	//adding some signals to test
+	sigaddset(&sigset,SIGINT);
+	sigaddset(&sigset,SIGQUIT);
+	sigaddset(&sigset,SIGCONT);
+	sigaddset(&sigset,SIGKILL);
     printf("%s", str);
-    if (sigismember(&sigset, SIGINT))   printf("SIGINT ");
-    if (sigismember(&sigset, SIGQUIT))  printf("SIGQUIT ");
-    if (sigismember(&sigset, SIGUSR1))  printf("SIGUSR1 ");
-    if (sigismember(&sigset, SIGALRM))  printf("SIGALRM ");
 
-    /* remaining signals can go here */
+    for(i=1; i < NSIG; i++){
+    if(sigismember(&sigset, i)){
+    printf("%s\n", strdup(sys_siglist[i]));
+    }
+	}
+
 
     printf("\n");
     errno = errno_save;
@@ -36,7 +43,9 @@ pr_mask(const char *str)
 
 int main()
 {
-pr_mask("Starting main");
+pr_mask("Starting main\n");
+//int test = sigblock(0);
 
-pr_mask("Ending main");
+//printf("siggetmask() returned : %d\n",test);
+pr_mask("Ending main\n");
 }
