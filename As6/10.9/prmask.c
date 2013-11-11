@@ -28,6 +28,7 @@ pr_mask(const char *str)
 	sigaddset(&sigset,SIGQUIT);
 	sigaddset(&sigset,SIGCONT);
 	sigaddset(&sigset,SIGKILL);
+
     printf("%s", str);
 
     for(i=1; i < NSIG; i++){
@@ -44,8 +45,4 @@ pr_mask(const char *str)
 int main()
 {
 pr_mask("Starting main\n");
-//int test = sigblock(0);
-
-//printf("siggetmask() returned : %d\n",test);
-pr_mask("Ending main\n");
 }
