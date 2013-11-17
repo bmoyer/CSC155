@@ -1,0 +1,18 @@
+root       542     1   541   541 TS   19 Nov13 ?        00:00:00 upstart-file-bridge --daemon
+root       559     1   558   558 TS   19 Nov13 ?        00:00:00 upstart-udev-bridge --daemon
+root       561     1   561   561 TS   19 Nov13 ?        00:00:00 /sbin/udevd --daemon
+102        629     1   629   629 TS   19 Nov13 ?        00:00:03 dbus-daemon --system --fork
+avahi      663   662   661   661 TS   19 Nov13 ?        00:00:00 avahi-daemon: chroot helper
+root       732   561   561   561 TS   19 Nov13 ?        00:00:00 /sbin/udevd --daemon
+root       733   561   561   561 TS   19 Nov13 ?        00:00:00 /sbin/udevd --daemon
+root      1013     1  1012  1012 TS   19 Nov13 ?        00:00:00 upstart-socket-bridge --daemon
+root      1559     1   629   629 TS   19 Nov13 ?        00:00:00 /usr/sbin/console-kit-daemon --no-daemon
+root      2087     1   629   629 TS   19 Nov13 ?        00:00:05 /usr/lib/accountsservice/accounts-daemon
+rtkit     2421     1   629   629 TS   18 Nov13 ?        00:00:01 /usr/lib/rtkit/rtkit-daemon
+ben       4794     1  4785  1391 TS   19 12:09 pts/0    00:00:00 git-credential-cache--daemon /home/ben/.git-credential-cache/socket
+mdm      12533     1 12533 12533 TS   19 Nov14 ?        00:00:00 //bin/dbus-daemon --fork --print-pid 5 --print-address 7 --session
+ben      12644     1 12644 12644 TS   19 Nov14 ?        00:00:02 //bin/dbus-daemon --fork --print-pid 5 --print-address 9 --session
+ben      12659 12562 12562 12562 TS   19 Nov14 ?        00:00:01 Thunar --sm-client-id 246f01a51-9640-4f88-9226-22178d99e0c6 --daemon
+ben      12743 12738 12644 12644 TS   19 Nov14 ?        00:00:00 /bin/dbus-daemon --config-file=/etc/at-spi2/accessibility.conf --nofork --print-address 3
+ben      12862     1 12644 12644 TS   19 Nov14 ?        00:00:00 /usr/bin/obex-data-server --no-daemon 
+ben      13006     1 12644 12644 TS   19 Nov14 ?        00:00:02 /usr/bin/gnome-screensaver --no-daemon

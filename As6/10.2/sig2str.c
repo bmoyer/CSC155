@@ -6,20 +6,20 @@
 #include <ctype.h>
 
 void sig2str(int signo, char *str){
-char *sigName = strdup(sys_siglist[signo]);
-strcpy(str, sigName);
+	char *sigName = strdup(sys_siglist[signo]);
+	strcpy(str, sigName);
 }
 
 int main()
 {
-int i;
-for(i=1; i<20; i++){ 
+	int i;
+	for(i=1; i<20; i++){ 
 
-char *test = malloc(50);
-sig2str(i,test);
-printf("%s\n",test);
-free(test);
+		char *test = malloc(50);
+		sig2str(i,test);
+		printf("%s\n",test);
+		free(test);
 
-}
+	}
 
 }
