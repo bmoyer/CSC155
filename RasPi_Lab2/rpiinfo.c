@@ -20,7 +20,8 @@ void uptime(){
 
         //getting total seconds
         int secs = atoi(totalsecs);
-//converting total seconds to other units
+	
+	//converting total seconds to other units
         int days = secs/86400;
         secs -= days*86400;
         int hours = secs/3600;
@@ -29,24 +30,21 @@ void uptime(){
         secs -= minutes*60;
         int seconds = secs;
 
-        //beam it back down
         printf("Uptime: %02d:%02d:%02d:%02d\n", days,hours,minutes,seconds);
 }
 void cpuinfo(){
         int i = 0;
         char *token;
         const char DELIMS[2] = ":\n";
-        char* totalsecs;
         char str[100];
         char *toks[100];
 
-        //getting contents of /proc/uptime
+	//getting contents of /proc/cpuinfo
         FILE *file = fopen("/proc/cpuinfo","r");
         fgets(str,100,file);
         fclose(file);
 
         int j = 0;
-        //tokenizing stuff
         token = strtok(str,DELIMS);
         while(token != NULL){
         toks[j] = token;
@@ -54,21 +52,20 @@ void cpuinfo(){
         }
         printf("CPU:%s\n",toks[0]);
 }
+
 void kernelinfo(){
         int i = 0;
         char *token;
         const char DELIMS[1] = "(";
-        char* totalsecs;
         char str[100];
         char *toks[100];
 
-        //getting contents of /proc/uptime
+        //getting contents of /proc/version
         FILE *file = fopen("/proc/version","r");
         fgets(str,100,file);
         fclose(file);
 
         int j = 1;
-
         //tokenizing stuff
         token = strtok(str,DELIMS);
         toks[0] = token;
@@ -78,8 +75,6 @@ void kernelinfo(){
         }
         printf("Kernel:%s\n",toks[0]);
 }
-
-
 int main(){
 
 cpuinfo();
