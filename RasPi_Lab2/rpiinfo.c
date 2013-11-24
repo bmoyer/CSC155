@@ -20,7 +20,7 @@ void uptime(){
 
         //getting total seconds
         int secs = atoi(totalsecs);
- //converting total seconds to other units
+//converting total seconds to other units
         int days = secs/86400;
         secs -= days*86400;
         int hours = secs/3600;
@@ -32,12 +32,11 @@ void uptime(){
         //beam it back down
         printf("Uptime: %02d:%02d:%02d:%02d\n", days,hours,minutes,seconds);
 }
-
 void cpuinfo(){
         int i = 0;
         char *token;
         const char DELIMS[2] = ":\n";
-      char* totalsecs;
+        char* totalsecs;
         char str[100];
         char *toks[100];
 
@@ -55,10 +54,9 @@ void cpuinfo(){
         }
         printf("CPU:%s\n",toks[0]);
 }
-
 void kernelinfo(){
         int i = 0;
-     char *token;
+        char *token;
         const char DELIMS[1] = "(";
         char* totalsecs;
         char str[100];
@@ -87,6 +85,4 @@ int main(){
 cpuinfo();
 kernelinfo();
 uptime();
-
 }
-
