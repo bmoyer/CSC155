@@ -2,7 +2,7 @@
 Author: Ben Moyer
 Date: 10/23/13
 = Description = 
-iManip is a simpel shell that can take various command names and return the result of the command to the user.  Supported commands are as follows:
+iManip is a simple shell that can take various command names and return the result of the command to the user.  Supported commands are as follows:
 -bit_shift_left X Y returns integer X shifted left Y places
 -bit_shift_right X Y returns integer X shifted right Y places
 -bit_and X Y returns X <bitwise AND> Y
